@@ -1,10 +1,6 @@
 from empath import Empath
-import time
 
 ta = Empath()
-text = open('file.txt','rt').read()
-
-start = time.time()
 
 def cout_paragraph_subjects(data):
     subjects = data["subjects"]
@@ -42,14 +38,14 @@ def get_best_by_weight(data):
             result = selected_data
     return result
 
-def trim_text(paragraphs):
+def trim_text(text):
     # Stage 1: paragraph analyze and getting subjects
     paragraph_subjects = [
         {
             "subjects":ta.analyze(paragraph),
             "paragraph":paragraph
         }
-        for paragraph in paragraphs
+        for paragraph in text.split(".")
         if paragraph
     ]
     # Stage 2: set weight for paragraphs
@@ -67,9 +63,3 @@ def trim_text(paragraphs):
             get_best_by_weight(weight_data)
         )
     return trimes
-
-litexs = trim_text(text.split("\n"))
-
-print(litexs[0]["paragraph"],"\n")
-print(litexs[1]["paragraph"],"\n")
-print(time.time() - start)
