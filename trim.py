@@ -17,7 +17,13 @@ def cout_paragraph_subjects(data):
 
 def sum_paragraph_subjects_weights(data):
     subjects = data["subjects"]
-    subjects = [ {name: subjects[name]} for name in subjects if subjects[name] > 0]
+    subjects = [
+        {
+            name: subjects[name]
+        }
+        for name in subjects
+        if subjects[name] > 0
+    ]
     weight = 0
     for name in data["subjects"]:
         weight += data["subjects"][name]
@@ -36,15 +42,34 @@ def get_best_by_weight(data):
             result = selected_data
     return result
 
-# Stage 1: paragraph analyze and getting subjects
-paragraph_subjects = [ {"subjects":ta.analyze(paragraph), "paragraph":paragraph} for paragraph in text.split("\n") if paragraph ]
-# Stage 2: set weight for paragraphs
-paragraph_weights_1 = list(map(cout_paragraph_subjects ,paragraph_subjects))
-paragraph_weights_2 = list(map(sum_paragraph_subjects_weights ,paragraph_subjects))
-# Stage 3: trimming the best part
-litex_1 = get_best_by_weight(paragraph_weights_1)
-litex_2 = get_best_by_weight(paragraph_weights_2)
+def trim_text(paragraphs):
+    # Stage 1: paragraph analyze and getting subjects
+    paragraph_subjects = [
+        {
+            "subjects":ta.analyze(paragraph),
+            "paragraph":paragraph
+        }
+        for paragraph in paragraphs
+        if paragraph
+    ]
+    # Stage 2: set weight for paragraphs
+    paragraph_weights = []
+    paragraph_weights.append(
+        list(map(cout_paragraph_subjects ,paragraph_subjects))
+    )
+    paragraph_weights.append(
+        list(map(sum_paragraph_subjects_weights ,paragraph_subjects))
+    )
+    # Stage 3: trimming the best part
+    trimes = []
+    for weight_data in paragraph_weights:
+        trimes.append(
+            get_best_by_weight(weight_data)
+        )
+    return trimes
 
-print(litex_1["paragraph"],"\n")
-print(litex_2["paragraph"],"\n")
+litexs = trim_text(text.split("\n"))
+
+print(litexs[0]["paragraph"],"\n")
+print(litexs[1]["paragraph"],"\n")
 print(time.time() - start)
