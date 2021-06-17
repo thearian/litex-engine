@@ -1,31 +1,24 @@
 from empath import Empath
+from sys import argv
 
 ta = Empath()
 
 def cout_paragraph_subjects(data):
     subjects = data["subjects"]
-    subjects = [ {name: subjects[name]} for name in subjects if subjects[name] > 0]
     return {
-        "data": data,
+        "subjects": subjects,
         "weight": len(subjects),
         "paragraph": data["paragraph"]
     }
 
 def sum_paragraph_subjects_weights(data):
     subjects = data["subjects"]
-    subjects = [
-        {
-            name: subjects[name]
-        }
-        for name in subjects
-        if subjects[name] > 0
-    ]
     weight = 0
-    for name in data["subjects"]:
-        weight += data["subjects"][name]
+    for subject in subjects:
+        weight += subject[1]
     return {
-        "data": data,
-        "weight": weight,
+        "subjects": subjects,
+        "weight": int(weight),
         "paragraph": data["paragraph"]
     }
 
@@ -38,11 +31,26 @@ def get_best_by_weight(data):
             result = selected_data
     return result
 
+def dict_to_list(converting_dict):
+    converted_list = []
+    for key in converting_dict:
+        converted_list.append([
+            key,
+            converting_dict[key]
+        ])
+    return converted_list
+
 def trim_text(text):
     # Stage 1: paragraph analyze and getting subjects
     paragraph_subjects = [
         {
-            "subjects":ta.analyze(paragraph),
+            "subjects":[
+                item
+                for item in dict_to_list(
+                    ta.analyze(paragraph)
+                )
+                if item[1] > 0
+            ],
             "paragraph":paragraph
         }
         for paragraph in text.split(".")
@@ -59,7 +67,13 @@ def trim_text(text):
     # Stage 3: trimming the best part
     trimes = []
     for weight_data in paragraph_weights:
-        trimes.append(
-            get_best_by_weight(weight_data)
-        )
+        trimed = get_best_by_weight(weight_data)
+        if trimed in paragraph_weights: continue
+        trimes.append(trimed)
     return trimes
+
+if len(argv) > 1:
+    text = argv[1]
+    print(
+        trim_text(text)
+    )

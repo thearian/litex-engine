@@ -8,16 +8,27 @@ Litex python text analyze for compressing and trimming articles to small conclus
 It is recommended to use the latest version of Python. Flask supports Python 3.6 and newer.
 
 ### 2. Activate the enviroment
-> venv\Scripts\activate
+```
+venv\Scripts\activate
+```
 
 ### 3. Install Flask
->pip install flask
+```
+pip install flask
+```
 
 
 ## Develop
+### Testing Trim
+```bash
+py trim.py "mytext"
+```
+### Running Flask
 The server file is `app.py`. This name is **vital** to skip setting the flask enviroment variables.\
 For starting the server run
-> flask run
+```
+flask run
+```
 and the server will be on http://localhost:5000
 
 ## Documentaion
@@ -27,15 +38,11 @@ and the server will be on http://localhost:5000
 |/trim/text|text: String      |
 |/trim/url |url: String       |
 
-### Responces
-**NEEDS RECONSIDERATION**
-```json
+### Responces types
+```typescript
 {
-    "data":{
-        "subjects": [],
-        "paragraph": "",
-    },
-    "paragraph": "",
-    "weight": "",
-}
+    subjects: [string,number],
+    paragraph: string,
+    weight: number,
+} 
 ```
