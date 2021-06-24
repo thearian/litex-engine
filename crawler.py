@@ -3,6 +3,8 @@ from datetime import datetime
 import json
 
 from clean import clean_text, is_binary_string
+import database
+from trim import trim_text
 
 class Crawler(scrapy.Spider):
     name = 'Crawler_Spider'
@@ -28,18 +30,21 @@ class Crawler(scrapy.Spider):
         for p_text in res.css('p'):
             text = p_text.css('::text').extract_first()
             text = clean_text(text)
-            yield {
-                "p": text
-            }
             new_article["text"] += text
 
-        if len(new_article["text"]) > 0 and is_binary_string(new_article["text"]):
+        if len(new_article["text"]) > 10 and is_binary_string(new_article["text"]):
             title = "-".join(current_time)
             if len(new_article["title"]) > 0:
                 title = new_article["title"]
-            database = open("data/"+ title +".json","at")
-            data = json.dumps(new_article, indent="     ")
-            database.write(data)
+            database.save(new_article, "data/articles/"+title)
+
+            litex = {
+                "source": res.request.url,
+                "title": title,
+                "texts": trim_text(new_article["text"]),
+                "trimedAt": "-".join(current_time),
+            }
+            database.save(litex, "data/litexes/"+title)
         
         for linked_sites in res.css('a'):
             link = linked_sites.css('::attr(href)').extract_first()
