@@ -6,10 +6,10 @@ import get
 app = Flask(__name__)
 
 def convert_to_dict(converting_list):
-    litexes = {}
-    for i, litex in enumerate(converting_list):
-        litexes[i] = litex
-    return litexes
+    texts = {}
+    for i, text in enumerate(converting_list):
+        texts[i] = text
+    return texts
 
 @app.route('/trim/text')
 def route_trim_text():

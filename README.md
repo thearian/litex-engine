@@ -1,5 +1,5 @@
 # Litex Engine
-Litex python text analyze for compressing and trimming articles to small conclusions
+Litex python text analyze for compressing and trimming sources to small conclusions
 
 
 ## Start working (installation)
@@ -24,8 +24,8 @@ The current way of saving the results is *JSON fiels*. So you need to make the `
 ```bash
 mkdir data
 cd data
-mkdir articles
-mkdir litexes
+mkdir sources
+mkdir texts
 ```
 For runnging the crawler first install scrapy and then run `crawler.py` spider.
 ```bash

@@ -21,7 +21,7 @@ class Crawler(scrapy.Spider):
             str(time_obj.second),
         ]
 
-        new_article = {
+        new_source = {
             "title": clean_text(res.css('h1 ::text').extract_first()),
             "text": "",
             "extractedAt": "-".join(current_time)
@@ -30,21 +30,21 @@ class Crawler(scrapy.Spider):
         for p_text in res.css('p'):
             text = p_text.css('::text').extract_first()
             text = clean_text(text)
-            new_article["text"] += text
+            new_source["text"] += text
 
-        if len(new_article["text"]) > 10 and is_binary_string(new_article["text"]):
+        if len(new_source["text"]) > 10 and is_binary_string(new_source["text"]):
             title = "-".join(current_time)
-            if len(new_article["title"]) > 0:
-                title = new_article["title"]
-            database.save(new_article, "data/articles/"+title)
+            if len(new_source["title"]) > 0:
+                title = new_source["title"]
+            database.save(new_source, "data/sources/"+title)
 
-            litex = {
+            text = {
                 "source": res.request.url,
                 "title": title,
-                "texts": trim_text(new_article["text"]),
+                "texts": trim_text(new_source["text"]),
                 "trimedAt": "-".join(current_time),
             }
-            database.save(litex, "data/litexes/"+title)
+            database.save(text, "data/texts/"+title)
         
         for linked_sites in res.css('a'):
             link = linked_sites.css('::attr(href)').extract_first()
