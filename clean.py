@@ -5,8 +5,8 @@ def clean_backslash(text):
     cleaned = text.replace('\\n', ' ').replace('\\t', ' ').replace('\\s', ' ')
     return cleaned
 
+cleaner = re.compile('<.*?>')
 def clean_html(raw_html):
-    cleaner = re.compile('<.*?>')
     html_cleaned = re.sub(cleaner, '', str(raw_html))
     return html_cleaned
 
