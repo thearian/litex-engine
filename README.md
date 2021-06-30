@@ -18,6 +18,22 @@ pip install flask
 ```
 
 
+## Crawler
+The crawler will visit the website it is given at `crawler.py` file and look for any website links and indexs them.\
+The current way of saving the results is *JSON fiels*. So you need to make the `data/` directory.
+```bash
+mkdir data
+cd data
+mkdir articles
+mkdir litexes
+```
+For runnging the crawler first install scrapy and then run `crawler.py` spider.
+```bash
+pip install scrapy
+```
+```bash
+scrapy runspider crawler.py
+```
 ## Develop
 ### Testing Trim
 ```bash
