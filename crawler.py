@@ -2,7 +2,7 @@ import scrapy
 from datetime import datetime
 import json
 
-from clean import clean_text, is_binary_string
+from helper import clean_text, is_binary_string, is_http_url
 import database
 from trim import trim_text
 
@@ -48,7 +48,7 @@ class Crawler(scrapy.Spider):
         
         for linked_sites in res.css('a'):
             link = linked_sites.css('::attr(href)').extract_first()
-            if link:
+            if link and is_http_url(link):
                 yield scrapy.Request(
                     res.urljoin(link),
                     callback=self.parse

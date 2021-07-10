@@ -15,7 +15,7 @@ def clean_text(text):
         clean_html(text)
     )
 
-if argv[1]:
+if len(argv) > 1:
     print(
         clean_html(argv[1])
     )
@@ -23,3 +23,9 @@ if argv[1]:
 def is_binary_string(bytes):
     textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
     return bool(bytes.translate(textchars))
+
+def is_http_url(url):
+    result = re.match('^(https?:\\/\\/)?((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|((\\d{1,3}\\.){3}\\d{1,3}))(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*(\\?[;&a-z\\d%_.~+=-]*)?(\\#[-a-z\\d_]*)?$',
+        url
+    )
+    return result != None
